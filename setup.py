@@ -7,7 +7,7 @@ setup(
     package_dir={'': 'src'},
     python_requires='>=3.7',
     install_requires=[],
-    author='Vladlen-codes',
+    author='vladlen-codes',
     extras_require={
         "dev": [
             "pytest>=7.4.0",
