@@ -11,3 +11,13 @@ A high-performance, universal rate limiting library for Python with multiple alg
 - Type Hints: 100% type annotated
 - Zero Dependencies: Core library has no external dependencies
 - Extensible: Easy to add custom algorithms and backends
+
+## Contributing
+- Fork the repository
+- Create a feature branch (git checkout -b feature/amazing-feature)
+- Make your changes
+- Run tests (make test)
+- Run all quality checks (make all)
+- Commit your changes (git commit -m 'Add amazing feature')
+- Push to the branch (git push origin feature/amazing-feature)
+- Open a Pull Request
