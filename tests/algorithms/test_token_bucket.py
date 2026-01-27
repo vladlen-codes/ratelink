@@ -2,7 +2,7 @@ import pytest
 import time
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from src.algorithms.token_bucket import TokenBucketAlgorithm
+from src.universe.algorithms.token_bucket import TokenBucketAlgorithm
 
 class TestTokenBucketAlgorithm:
     def test_initialization(self):

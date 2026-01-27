@@ -2,7 +2,7 @@ import pytest
 import time
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from src.algorithms.sliding_window import SlidingWindowAlgorithm
+from src.universe.algorithms.sliding_window import SlidingWindowAlgorithm
 
 class TestSlidingWindowAlgorithm:
     def test_initialization(self):

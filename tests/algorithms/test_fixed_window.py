@@ -1,7 +1,7 @@
 import pytest
 import time
 from concurrent.futures import ThreadPoolExecutor
-from src.algorithms.fixed_window import FixedWindowAlgorithm
+from src.universe.algorithms.fixed_window import FixedWindowAlgorithm
 
 class TestFixedWindowAlgorithm:
     def test_initialization(self):
