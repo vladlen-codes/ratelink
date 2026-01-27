@@ -9,16 +9,16 @@ setup(
     packages=find_packages(),
     python_requires='>=3.7',
     install_requires=[],
-    author='Vladlen-codes',
-    author_email='your.email@example.com',  # Update with your email
+    author='vladlen-codes',
+    author_email='vladlen.codes@gmail.com',
     description='A flexible rate limiting library with multiple algorithms',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/Vladlen-codes/ratelink',  # Update with your repo URL
+    url='https://github.com/vladlen-codes/ratelink',
     project_urls={
-        'Bug Tracker': 'https://github.com/Vladlen-codes/ratelink/issues',
-        'Documentation': 'https://github.com/Vladlen-codes/ratelink#readme',
-        'Source Code': 'https://github.com/Vladlen-codes/ratelink',
+        'Bug Tracker': 'https://github.com/vladlen-codes/ratelink/issues',
+        'Documentation': 'https://github.com/vladlen-codes/ratelink#readme',
+        'Source Code': 'https://github.com/vladlen-codes/ratelink',
     },
     classifiers=[
         'Development Status :: 3 - Alpha',
