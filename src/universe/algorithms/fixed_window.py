@@ -5,7 +5,6 @@ from typing import Dict, Tuple, Optional
 from ..core.abstractions import Algorithm
 from ..core.types import RateLimitState
 
-
 class FixedWindowAlgorithm(Algorithm):
     def __init__(self, limit: int, window_seconds: float) -> None:
         if limit <= 0:
