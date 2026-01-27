@@ -4,7 +4,7 @@ A production-grade rate limiter module with 5+ algorithms (Token Bucket, Sliding
 ## Purpose
 This module will be used to control and limit the rate of operations (like API requests, function calls, or resource access) to prevent system overload, ensure fair resource usage, and protect against abuse.
 
-## Features
+### Features
 - 5 Rate Limiting Algorithms: Token Bucket, Sliding Window, Leaky Bucket, Fixed Window, GCRA
 - High Performance: <1ms latency per operation
 - Thread-Safe: Concurrent access support
