@@ -2,7 +2,7 @@ import pytest
 import time
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
-from src.universe.backends.memory import MemoryBackend
+from ratelink.src.backends.memory import MemoryBackend
 
 class TestMemoryBackend:
     def test_initialization(self):

@@ -1,7 +1,7 @@
 import pytest
 import time
 from concurrent.futures import ThreadPoolExecutor
-from src.universe.algorithms.gcra import GCRAAlgorithm
+from ratelink.src.algorithms.gcra import GCRAAlgorithm
 
 
 class TestGCRAAlgorithm:
