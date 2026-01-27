@@ -11,7 +11,7 @@ setup(
     install_requires=[],
     author='vladlen-codes',
     author_email='vladlen.codes@gmail.com',
-    description='A flexible rate limiting library with multiple algorithms',
+    description='A production-grade rate limiter module with 5+ algorithms (Token Bucket, Sliding Window, Leaky Bucket, etc.) with multi-backend support (Redis, memory, distributed).',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/vladlen-codes/ratelink',
