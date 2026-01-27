@@ -13,13 +13,13 @@ This module will be used to control and limit the rate of operations (like API r
 - Zero Dependencies: Core library has no external dependencies
 - Extensible: Easy to add custom algorithms and backends
 
-## Key Use Cases
+### Key Use Cases
 - API Rate Limiting - Limit how many requests a user/client can make per time period
 - Resource Protection - Prevent system overload by throttling resource-intensive operations
 - Fair Usage Enforcement - Ensure equitable access to shared resources
 - DoS Protection - Mitigate denial-of-service attacks
 
-## Contributing
+### Contributing
 - Fork the repository
 - Create a feature branch (git checkout -b feature/amazing-feature)
 - Make your changes
