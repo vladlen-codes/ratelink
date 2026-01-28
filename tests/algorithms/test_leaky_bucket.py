@@ -1,7 +1,7 @@
 import pytest
 import time
 from concurrent.futures import ThreadPoolExecutor
-from ratelink.src.algorithms.leaky_bucket import LeakyBucketAlgorithm
+from ratelink.algorithms.leaky_bucket import LeakyBucketAlgorithm
 
 class TestLeakyBucketAlgorithm:
     def test_initialization(self):
