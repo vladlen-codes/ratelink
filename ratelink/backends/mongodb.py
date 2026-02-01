@@ -12,7 +12,6 @@ try:
 except ImportError:
     PYMONGO_AVAILABLE = False
 
-
 class MongoDBBackend(Backend):
     def __init__(
         self,

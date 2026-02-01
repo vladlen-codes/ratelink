@@ -21,7 +21,6 @@ try:
 except ImportError:
     ASYNCPG_AVAILABLE = False
 
-
 class PostgreSQLBackend(Backend):
     def __init__(
         self,
