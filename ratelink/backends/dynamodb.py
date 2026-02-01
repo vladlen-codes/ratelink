@@ -1,4 +1,3 @@
-# File: src/universal_rate_limiter/backends/dynamodb.py
 import time
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
