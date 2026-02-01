@@ -2,21 +2,16 @@ import time
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, List
 from ..core.abstractions import Backend
-from ..core.types import RateLimitState
-from ..core.types import BackendError
+from ..core.types import RateLimitState, BackendError
 
 try:
     import redis
     from redis.connection import ConnectionPool
     from redis.cluster import RedisCluster
+    from redis.asyncio import Redis as AsyncRedis
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
-try:
-    import aioredis
-    AIOREDIS_AVAILABLE = True
-except ImportError:
-    AIOREDIS_AVAILABLE = False
 
 CONSUME_SCRIPT = """
 local key = KEYS[1]
