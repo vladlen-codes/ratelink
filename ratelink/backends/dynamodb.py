@@ -11,7 +11,6 @@ try:
 except ImportError:
     BOTO3_AVAILABLE = False
 
-
 class DynamoDBBackend(Backend):
     def __init__(
         self,
