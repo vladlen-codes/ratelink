@@ -10,8 +10,7 @@ from .core.types import (
     ConfigError,
     TimeoutError,
 )
-
-from .core.abstractions import Algorithm, Backend, RateLimiter
+from .core.abstractions import Algorithm, Backend, RateLimiter as RateLimiterABC
 
 from .algorithms.token_bucket import TokenBucketAlgorithm
 from .algorithms.sliding_window import SlidingWindowAlgorithm
@@ -43,9 +42,15 @@ try:
 except ImportError:
     pass
 
+from .rate_limiter import RateLimiter
+from .config import ConfigLoader, RuleEngine
+
 __version__ = "0.2.0"
 
 __all__ = [
+    "RateLimiter",
+    "ConfigLoader",
+    "RuleEngine",
     "AlgorithmType",
     "BackendType",
     "WindowType",
@@ -58,7 +63,7 @@ __all__ = [
     "TimeoutError",
     "Algorithm",
     "Backend",
-    "RateLimiter",
+    "RateLimiterABC",
     "TokenBucketAlgorithm",
     "SlidingWindowAlgorithm",
     "LeakyBucketAlgorithm",
