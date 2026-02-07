@@ -41,6 +41,13 @@ from .config import ConfigLoader, RuleEngine
 from .priority_limiter import PriorityRateLimiter
 from .quota_pool import QuotaPool, SharedQuotaManager
 from .adaptive_limiter import AdaptiveRateLimiter
+from .metrics import (
+    MetricsCollector,
+    MetricValue,
+    HistogramBucket,
+    PrometheusExporter,
+    create_prometheus_exporter,
+)
 
 __version__ = "0.4.0"
 
@@ -79,4 +86,9 @@ __all__ = [
     "PostgreSQLBackend",
     "DynamoDBBackend",
     "MongoDBBackend",
+    "MetricsCollector",
+    "MetricValue",
+    "HistogramBucket",
+    "PrometheusExporter",
+    "create_prometheus_exporter",
 ]
