@@ -48,6 +48,8 @@ from .metrics import (
     PrometheusExporter,
     create_prometheus_exporter,
 )
+from .metrics.logging import AuditLogger
+from .metrics.statsd import StatsDExporter
 
 __version__ = "0.4.0"
 
@@ -91,4 +93,6 @@ __all__ = [
     "HistogramBucket",
     "PrometheusExporter",
     "create_prometheus_exporter",
+    "AuditLogger",
+    "StatsDExporter",
 ]
