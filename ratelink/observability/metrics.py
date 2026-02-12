@@ -5,19 +5,16 @@ from dataclasses import dataclass, field
 from threading import Lock
 from typing import Dict, Iterator, List, Optional, Tuple
 
-
 @dataclass
 class MetricValue:
     value: float
     labels: Dict[str, str] = field(default_factory=dict)
     timestamp: float = field(default_factory=time.time)
 
-
 @dataclass
-class HistogramBucket:
+class HistogramBucket:    
     le: float
     count: int = 0
-
 
 class MetricsCollector:
     def __init__(
@@ -25,11 +22,8 @@ class MetricsCollector:
         histogram_buckets: Optional[List[float]] = None
     ):
         self._lock = Lock()
-        
         self._counters: Dict[Tuple[str, ...], float] = defaultdict(float)
-        
         self._gauges: Dict[Tuple[str, ...], float] = {}
-        
         self._histograms: Dict[Tuple[str, ...], Dict] = defaultdict(
             lambda: {
                 "buckets": [HistogramBucket(le=b) for b in self._histogram_buckets],
