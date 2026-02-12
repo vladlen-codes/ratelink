@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, Optional
 
 try:
     from prometheus_client import Counter, Gauge, Histogram, REGISTRY, generate_latest
@@ -6,8 +6,7 @@ try:
 except ImportError:
     PROMETHEUS_AVAILABLE = False
 
-from .collector import MetricsCollector
-
+from ratelink.observability.metrics import MetricsCollector
 
 class PrometheusExporter(MetricsCollector):
     def __init__(
@@ -25,7 +24,6 @@ class PrometheusExporter(MetricsCollector):
         
         self._namespace = namespace
         self._registry = registry or REGISTRY
-
         self._prom_checks = Counter(
             f"{namespace}_checks_total",
             "Total number of rate limit checks",
@@ -117,7 +115,6 @@ class PrometheusExporter(MetricsCollector):
     
     def get_metrics_response(self) -> bytes:
         return generate_latest(self._registry)
-
 
 def create_prometheus_exporter(
     namespace: str = "rate_limiter",
