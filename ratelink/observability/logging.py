@@ -26,9 +26,9 @@ class AuditLogger:
         self._log_violations = log_violations
         self._log_config_changes = log_config_changes
         self._include_timestamp = include_timestamp
-        self._include_hostname = include_hostname
-        
+        self._include_hostname = include_hostname       
         self._lock = Lock()
+    
         if not json:
             self._logger = logging.getLogger("rate_limiter.audit")
             self._logger.setLevel(level)
