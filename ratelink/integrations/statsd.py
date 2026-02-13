@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from threading import Lock
 from typing import Dict, Iterator, Optional
 
-from .collector import MetricsCollector
+from ratelink.observability.metrics import MetricsCollector
 
 
 class StatsDExporter(MetricsCollector):
@@ -22,8 +22,10 @@ class StatsDExporter(MetricsCollector):
         self._prefix = prefix.rstrip(".")
         self._max_packet_size = max_packet_size
         self._sample_rate = sample_rate
+        
         self._socket: Optional[socket.socket] = None
         self._socket_lock = Lock()
+        
         self._send_failures = 0
         self._last_error: Optional[Exception] = None
     
@@ -149,12 +151,14 @@ class StatsDExporter(MetricsCollector):
         finally:
             duration = time.perf_counter() - start_time
             duration_ms = duration * 1000
+
             self._record_histogram(
                 "rate_limit_latency_seconds",
                 backend,
                 operation,
                 duration
             )
+            
             metric = self._format_metric(
                 "latency",
                 duration_ms,
