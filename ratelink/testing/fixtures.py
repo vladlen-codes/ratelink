@@ -58,7 +58,7 @@ def redis_limiter():
         from ratelink.backends.redis import RedisBackend
         client = redis.Redis(host='localhost', port=6379, db=0)
         client.ping()
-        backend = RedisBackend(client=client)
+        backend = RedisBackend(host='localhost', port=6379, db=0)
         limiter = RateLimiter(
             algorithm="token_bucket",
             limit=100,
@@ -76,7 +76,7 @@ def postgres_limiter():
     try:
         import psycopg2
         from ratelink import RateLimiter
-        from ..backends.postgresql import PostgresBackend
+        from ..backends.postgresql import PostgreSQLBackend
         
         conn = psycopg2.connect(
             host='localhost',
@@ -85,7 +85,7 @@ def postgres_limiter():
             password='postgres'
         )
         
-        backend = PostgresBackend(connection=conn)
+        backend = PostgreSQLBackend(connection=conn)
         limiter = RateLimiter(
             algorithm="token_bucket",
             limit=100,

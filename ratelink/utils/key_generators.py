@@ -125,12 +125,12 @@ def by_session(session_key: str = "session_id") -> KeyGeneratorFunc:
     def get_key(request: Any) -> str:
         if hasattr(request, 'session'):
             session = request.session
+            if hasattr(session, 'session_key'):
+                return f"session:{session.session_key}"
             if hasattr(session, 'get'):
                 session_id = session.get(session_key)
                 if session_id:
                     return f"session:{session_id}"
-            if hasattr(session, 'session_key'):
-                return f"session:{session.session_key}"
         
         if hasattr(request, 'cookies'):
             session_id = request.cookies.get(session_key)

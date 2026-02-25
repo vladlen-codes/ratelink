@@ -1,0 +1,186 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ratelink"
+version = "1.0.1"
+description = "Production-ready rate limiting library for Python with multiple algorithms, backends, and framework integrations"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "vladlen-codes", email = "vladlen.codes@gmail.com"}
+]
+maintainers = [
+    {name = "vladlen-codes", email = "vladlen.codes@gmail.com"}
+]
+keywords = [
+    "rate-limiting",
+    "rate-limiter",
+    "throttling",
+    "api-gateway",
+    "token-bucket",
+    "leaky-bucket",
+    "sliding-window",
+    "fastapi",
+    "flask",
+    "django",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: System :: Networking",
+    "Typing :: Typed",
+]
+
+dependencies = []
+
+[project.optional-dependencies]
+# Backend dependencies
+redis = ["redis>=4.0.0"]
+postgres = ["psycopg2-binary>=2.9.0"]
+postgres-async = ["asyncpg>=0.27.0"]
+dynamodb = ["boto3>=1.26.0"]
+mongo = ["pymongo>=4.0.0"]
+
+# Web framework dependencies
+fastapi = ["fastapi>=0.100.0", "starlette>=0.27.0"]
+flask = ["flask>=2.0.0"]
+django = ["django>=3.2.0"]
+aiohttp = ["aiohttp>=3.8.0"]
+
+# Observability dependencies
+prometheus = ["prometheus-client>=0.16.0"]
+otel = ["opentelemetry-api>=1.20.0", "opentelemetry-sdk>=1.20.0"]
+observability = ["prometheus-client>=0.16.0", "opentelemetry-api>=1.20.0", "opentelemetry-sdk>=1.20.0"]
+
+# Development dependencies
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.4.0",
+    "bandit>=1.7.0",
+    "pre-commit>=3.3.0",
+    "twine>=4.0.0",
+    "build>=0.10.0",
+]
+
+# Convenience bundles
+yaml = ["pyyaml>=6.0"]
+backends = ["redis>=4.0.0", "psycopg2-binary>=2.9.0", "boto3>=1.26.0", "pymongo>=4.0.0"]
+frameworks = ["fastapi>=0.100.0", "flask>=2.0.0", "django>=3.2.0", "aiohttp>=3.8.0"]
+all = [
+    "redis>=4.0.0",
+    "psycopg2-binary>=2.9.0",
+    "asyncpg>=0.27.0",
+    "boto3>=1.26.0",
+    "pymongo>=4.0.0",
+    "fastapi>=0.100.0",
+    "starlette>=0.27.0",
+    "flask>=2.0.0",
+    "django>=3.2.0",
+    "aiohttp>=3.8.0",
+    "prometheus-client>=0.16.0",
+    "opentelemetry-api>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/vladlen-codes/ratelink"
+Documentation = "https://github.com/vladlen-codes/ratelink#readme"
+Repository = "https://github.com/vladlen-codes/ratelink"
+"Bug Tracker" = "https://github.com/vladlen-codes/ratelink/issues"
+Changelog = "https://github.com/your-org/ratelink/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["ratelink*"]
+
+[tool.setuptools.package-data]
+ratelink = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--showlocals",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "redis_required: marks tests that require Redis",
+    "postgres_required: marks tests that require PostgreSQL",
+    "asyncio: marks tests as async",
+]
+
+[tool.coverage.run]
+source = ["ratelink"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if TYPE_CHECKING:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "@abstractmethod",
+]

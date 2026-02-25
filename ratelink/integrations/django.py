@@ -3,7 +3,7 @@ from typing import Any, Callable, Optional
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
-from django.utils.module_loading import import_strin
+from django.utils.module_loading import import_string
 from ratelink.utils.key_generators import KeyGeneratorFunc, by_ip
 
 class DjangoRateLimitMiddleware:
@@ -48,29 +48,29 @@ class DjangoRateLimitMiddleware:
         
         key = self.key_func(request)
         
-        allowed, state = self.limiter.check(key)
+        state = self.limiter.check(key)
         
-        if not allowed:
+        if state.violated:
             return self._make_error_response(state)
         
         response = self.get_response(request)
-        response['X-RateLimit-Limit'] = str(state.get('limit', 0))
-        response['X-RateLimit-Remaining'] = str(state.get('remaining', 0))
+        response['X-RateLimit-Limit'] = str(state.limit)
+        response['X-RateLimit-Remaining'] = str(state.remaining)
         
         return response
     
-    def _make_error_response(self, state: dict) -> JsonResponse:
-        retry_after = state.get('retry_after', 0)
+    def _make_error_response(self, state) -> JsonResponse:
+        retry_after = state.retry_after
         
         response = JsonResponse({
             "error": "Rate limit exceeded",
-            "limit": state.get('limit', 0),
+            "limit": state.limit,
             "remaining": 0,
             "retry_after": retry_after
         }, status=429)
         
         response['Retry-After'] = str(int(retry_after))
-        response['X-RateLimit-Limit'] = str(state.get('limit', 0))
+        response['X-RateLimit-Limit'] = str(state.limit)
         response['X-RateLimit-Remaining'] = '0'
         
         return response
@@ -99,19 +99,19 @@ def django_rate_limit(
             
             key = key_func(request)
             
-            allowed, state = actual_limiter.check(key)
+            state = actual_limiter.check(key)
             
-            if not allowed:
-                retry_after = state.get('retry_after', 0)
+            if state.violated:
+                retry_after = state.retry_after
                 response = JsonResponse({
                     "error": "Rate limit exceeded",
-                    "limit": state.get('limit', 0),
+                    "limit": state.limit,
                     "remaining": 0,
                     "retry_after": retry_after
                 }, status=429)
                 
                 response['Retry-After'] = str(int(retry_after))
-                response['X-RateLimit-Limit'] = str(state.get('limit', 0))
+                response['X-RateLimit-Limit'] = str(state.limit)
                 response['X-RateLimit-Remaining'] = '0'
                 
                 return response

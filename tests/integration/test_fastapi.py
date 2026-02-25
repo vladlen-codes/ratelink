@@ -8,7 +8,7 @@ except ImportError:
     FASTAPI_AVAILABLE = False
 
 if FASTAPI_AVAILABLE:
-    from ratelink.integration.fastapi import (
+    from ratelink.integrations.fastapi import (
         FastAPIRateLimitMiddleware,
         rate_limit,
     )

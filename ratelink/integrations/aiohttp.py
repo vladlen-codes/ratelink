@@ -20,29 +20,29 @@ def aiohttp_rate_limit_middleware(
         
         key = key_func(request)
         
-        allowed, state = limiter.check(key)
+        state = limiter.check(key)
         
-        if not allowed:
-            retry_after = state.get('retry_after', 0)
+        if state.violated:
+            retry_after = state.retry_after
             return web.json_response(
                 {
                     "error": "Rate limit exceeded",
-                    "limit": state.get('limit', 0),
+                    "limit": state.limit,
                     "remaining": 0,
                     "retry_after": retry_after
                 },
                 status=429,
                 headers={
                     "Retry-After": str(int(retry_after)),
-                    "X-RateLimit-Limit": str(state.get('limit', 0)),
+                    "X-RateLimit-Limit": str(state.limit),
                     "X-RateLimit-Remaining": "0",
                 }
             )
         
         response = await handler(request)
         
-        response.headers['X-RateLimit-Limit'] = str(state.get('limit', 0))
-        response.headers['X-RateLimit-Remaining'] = str(state.get('remaining', 0))
+        response.headers['X-RateLimit-Limit'] = str(state.limit)
+        response.headers['X-RateLimit-Remaining'] = str(state.remaining)
         
         return response
     
@@ -59,21 +59,21 @@ def rate_limit(
         async def wrapper(request):
             key = key_func(request)
             
-            allowed, state = limiter.check(key)
+            state = limiter.check(key)
             
-            if not allowed:
-                retry_after = state.get('retry_after', 0)
+            if state.violated:
+                retry_after = state.retry_after
                 return web.json_response(
                     {
                         "error": "Rate limit exceeded",
-                        "limit": state.get('limit', 0),
+                        "limit": state.limit,
                         "remaining": 0,
                         "retry_after": retry_after
                     },
                     status=429,
                     headers={
                         "Retry-After": str(int(retry_after)),
-                        "X-RateLimit-Limit": str(state.get('limit', 0)),
+                        "X-RateLimit-Limit": str(state.limit),
                         "X-RateLimit-Remaining": "0",
                     }
                 )
@@ -114,6 +114,16 @@ class AIOHTTPRateLimiter:
         handler._rate_limit_exempt = True
         return handler
 
+
+class RateLimitExceeded(Exception):    
+    def __init__(self, state):
+        self.state = state
+        self.retry_after = state.retry_after if hasattr(state, 'retry_after') else 0
+        self.limit = state.limit if hasattr(state, 'limit') else 0
+        self.remaining = state.remaining if hasattr(state, 'remaining') else 0
+        super().__init__(f"Rate limit exceeded. Retry after {self.retry_after}s")
+
+
 async def error_handler(request, exc):
     if isinstance(exc, RateLimitExceeded):
         return web.json_response(
@@ -125,11 +135,3 @@ async def error_handler(request, exc):
             headers={"Retry-After": str(int(exc.retry_after))}
         )
     raise exc
-
-class RateLimitExceeded(Exception):    
-    def __init__(self, state: dict):
-        self.state = state
-        self.retry_after = state.get('retry_after', 0)
-        self.limit = state.get('limit', 0)
-        self.remaining = state.get('remaining', 0)
-        super().__init__(f"Rate limit exceeded. Retry after {self.retry_after}s")

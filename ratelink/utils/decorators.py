@@ -1,3 +1,4 @@
+import asyncio
 import functools
 from typing import Any, Callable, Optional
 from ratelink.utils.key_generators import KeyGeneratorFunc, by_ip
@@ -39,13 +40,13 @@ def rate_limit(
             if limit is not None and window is not None:
                 pass
             
-            allowed, state = limiter.check(key)
+            state = limiter.check(key)
             
-            if not allowed:
+            if state.violated:
                 raise RateLimitExceeded(
-                    retry_after=state.get('retry_after', 0),
-                    limit=state.get('limit', 0),
-                    remaining=state.get('remaining', 0)
+                    retry_after=state.retry_after,
+                    limit=state.limit,
+                    remaining=state.remaining
                 )
             
             return await func(*args, **kwargs)
@@ -59,18 +60,18 @@ def rate_limit(
             
             key = key_generator(request)
             
-            allowed, state = limiter.check(key)
+            state = limiter.check(key)
             
-            if not allowed:
+            if state.violated:
                 raise RateLimitExceeded(
-                    retry_after=state.get('retry_after', 0),
-                    limit=state.get('limit', 0),
-                    remaining=state.get('remaining', 0)
+                    retry_after=state.retry_after,
+                    limit=state.limit,
+                    remaining=state.remaining
                 )
             
             return func(*args, **kwargs)
         
-        if functools.iscoroutinefunction(func):
+        if asyncio.iscoroutinefunction(func):
             return async_wrapper
         else:
             return sync_wrapper

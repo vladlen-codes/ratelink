@@ -33,8 +33,8 @@ class NoOpTracer:
 
 
 try:
-    from ratelink.m import trace
-    from openteletry.trace import Status, StatusCode
+    from opentelemetry import trace
+    from opentelemetry.trace import Status, StatusCode
     OTEL_AVAILABLE = True
 except ImportError:
     OTEL_AVAILABLE = False

@@ -1,6 +1,10 @@
 import time
-import psutil
-from typing import Dict, Optional, Any, Callable
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+from typing import Dict, Optional, Any, Callable, Union
 from threading import RLock
 from collections import deque
 from .rate_limiter import RateLimiter
@@ -77,20 +81,21 @@ class AdaptiveRateLimiter:
         should_reduce = False
         should_increase = False
         reason = []
-        try:
-            cpu_percent = psutil.cpu_percent(interval=0.1)
-            if cpu_percent > self.cpu_threshold:
-                should_reduce = True
-                reason.append(f"CPU={cpu_percent:.1f}%")
-        except Exception:
-            pass 
-        try:
-            memory = psutil.virtual_memory()
-            if memory.percent > self.memory_threshold:
-                should_reduce = True
-                reason.append(f"Memory={memory.percent:.1f}%")
-        except Exception:
-            pass
+        if PSUTIL_AVAILABLE:
+            try:
+                cpu_percent = psutil.cpu_percent(interval=0.1)
+                if cpu_percent > self.cpu_threshold:
+                    should_reduce = True
+                    reason.append(f"CPU={cpu_percent:.1f}%")
+            except Exception:
+                pass 
+            try:
+                memory = psutil.virtual_memory()
+                if memory.percent > self.memory_threshold:
+                    should_reduce = True
+                    reason.append(f"Memory={memory.percent:.1f}%")
+            except Exception:
+                pass
         if len(self._request_results) >= 10:
             error_count = sum(1 for r in self._request_results if not r)
             error_rate = error_count / len(self._request_results)

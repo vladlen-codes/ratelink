@@ -1,4 +1,4 @@
-from typing import Dict, Optional, List, Any
+from typing import Dict, Optional, List, Any, Union
 from threading import RLock
 from datetime import datetime, timedelta
 from .rate_limiter import RateLimiter

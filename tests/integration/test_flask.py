@@ -7,7 +7,7 @@ except ImportError:
     FLASK_AVAILABLE = False
 
 if FLASK_AVAILABLE:
-    from ratelink.integration.flask import (
+    from ratelink.integrations.flask import (
         FlaskRateLimiter,
         flask_rate_limit,
         parse_rate_limit_string,

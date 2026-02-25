@@ -1,5 +1,9 @@
 import os
-import yaml
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
 import json
 from typing import Dict, Any, Optional, Union, Callable, List
 from pathlib import Path
@@ -93,6 +97,11 @@ class ConfigLoader:
             raise ConfigError(f"Unsupported config format: {source_path.suffix}")
 
     def _load_yaml(self, path: Path) -> Dict[str, Any]:
+        if not YAML_AVAILABLE:
+            raise ConfigError(
+                "PyYAML is required to load YAML config files. "
+                "Install with: pip install pyyaml"
+            )
         try:
             with open(path, "r") as f:
                 config = yaml.safe_load(f)
@@ -112,7 +121,7 @@ class ConfigLoader:
         except Exception as e:
             raise ConfigError(f"Failed to load JSON: {e}")
 
-    def load_from_env(self, prefix: str = "RATELIMIT_") -> Dict[str, Any]:
+    def load_from_env(self, prefix: str = "RATELINK_") -> Dict[str, Any]:
         config: Dict[str, Any] = {
             "rate_limiting": {
                 "default": {},

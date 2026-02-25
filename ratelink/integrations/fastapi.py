@@ -24,21 +24,21 @@ class FastAPIRateLimitMiddleware(BaseHTTPMiddleware):
         
         key = self.key_generator(request)
         
-        allowed, state = self.limiter.check(key)
+        state = self.limiter.check(key)
         
-        if not allowed:
-            retry_after = state.get('retry_after', 0)
+        if state.violated:
+            retry_after = state.retry_after
             return JSONResponse(
                 status_code=429,
                 content={
                     "error": "Rate limit exceeded",
-                    "limit": state.get('limit', 0),
+                    "limit": state.limit,
                     "remaining": 0,
                     "retry_after": retry_after
                 },
                 headers={
                     "Retry-After": str(int(retry_after)),
-                    "X-RateLimit-Limit": str(state.get('limit', 0)),
+                    "X-RateLimit-Limit": str(state.limit),
                     "X-RateLimit-Remaining": "0",
                     "X-RateLimit-Reset": str(int(retry_after))
                 }
@@ -46,10 +46,10 @@ class FastAPIRateLimitMiddleware(BaseHTTPMiddleware):
         
         response = await call_next(request)
         
-        response.headers["X-RateLimit-Limit"] = str(state.get('limit', 0))
-        response.headers["X-RateLimit-Remaining"] = str(state.get('remaining', 0))
-        if state.get('reset_after'):
-            response.headers["X-RateLimit-Reset"] = str(int(state.get('reset_after', 0)))
+        response.headers["X-RateLimit-Limit"] = str(state.limit)
+        response.headers["X-RateLimit-Remaining"] = str(state.remaining)
+        if state.retry_after:
+            response.headers["X-RateLimit-Reset"] = str(int(state.retry_after))
         
         return response
 
@@ -80,21 +80,21 @@ def rate_limit(
 
             key = key_generator(request)
             
-            allowed, state = limiter.check(key)
+            state = limiter.check(key)
             
-            if not allowed:
-                retry_after = state.get('retry_after', 0)
+            if state.violated:
+                retry_after = state.retry_after
                 return JSONResponse(
                     status_code=429,
                     content={
                         "error": "Rate limit exceeded",
-                        "limit": state.get('limit', 0),
+                        "limit": state.limit,
                         "remaining": 0,
                         "retry_after": retry_after
                     },
                     headers={
                         "Retry-After": str(int(retry_after)),
-                        "X-RateLimit-Limit": str(state.get('limit', 0)),
+                        "X-RateLimit-Limit": str(state.limit),
                         "X-RateLimit-Remaining": "0",
                     }
                 )

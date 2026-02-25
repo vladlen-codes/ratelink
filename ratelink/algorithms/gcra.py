@@ -15,7 +15,7 @@ class GCRAAlgorithm(Algorithm):
         self.period_seconds = period_seconds
         self.burst = burst if burst is not None else limit
         self.emission_interval = period_seconds / limit
-        self.burst_allowance = self.emission_interval * (self.burst - 1)
+        self.burst_allowance = self.emission_interval * self.burst
         self._tats: Dict[str, float] = {}
         self._lock = RLock()
 

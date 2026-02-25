@@ -45,11 +45,16 @@ from ..observability.metrics import (
     MetricsCollector,
     MetricValue,
     HistogramBucket,
-    PrometheusExporter,
-    create_prometheus_exporter,
 )
+try:
+    from ..integrations.prometheus import PrometheusExporter, create_prometheus_exporter
+except ImportError:
+    pass
 from ..observability.logging import AuditLogger
-from ..integrations.statsd import StatsDExporter
+try:
+    from ..integrations.statsd import StatsDExporter
+except ImportError:
+    pass
 
 __version__ = "0.4.0"
 

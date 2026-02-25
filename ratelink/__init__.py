@@ -41,17 +41,22 @@ from .config import ConfigLoader, RuleEngine
 from .priority_limiter import PriorityRateLimiter
 from .quota_pool import QuotaPool, SharedQuotaManager
 from .adaptive_limiter import AdaptiveRateLimiter
-from .metrics import (
+from .observability.metrics import (
     MetricsCollector,
     MetricValue,
     HistogramBucket,
-    PrometheusExporter,
-    create_prometheus_exporter,
 )
-from .metrics.logging import AuditLogger
-from .metrics.statsd import StatsDExporter
+from .observability.logging import AuditLogger
+try:
+    from .integrations.prometheus import PrometheusExporter, create_prometheus_exporter
+except ImportError:
+    pass
+try:
+    from .integrations.statsd import StatsDExporter
+except ImportError:
+    pass
 
-__version__ = "0.4.0"
+__version__ = "1.0.1"
 
 __all__ = [
     "RateLimiter",

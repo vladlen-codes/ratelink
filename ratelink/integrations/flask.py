@@ -60,9 +60,9 @@ class FlaskRateLimiter:
                 
                 for limit_str in self.default_limits:
                     limit, window = parse_rate_limit_string(limit_str)
-                    allowed, state = self.limiter.check(key)
+                    state = self.limiter.check(key)
                     
-                    if not allowed:
+                    if state.violated:
                         return self._make_error_response(state)
                 
                 return None
@@ -87,20 +87,20 @@ class FlaskRateLimiter:
                 key = key_function(flask_request)
                 if per_method:
                     key = f"{key}:{flask_request.method}"
-                allowed, state = self.limiter.check(key)
-                if not allowed:
+                state = self.limiter.check(key)
+                if state.violated:
                     return self._make_error_response(state)
                 return func(*args, **kwargs)
             return wrapper
         return decorator
     
-    def _make_error_response(self, state: dict):
-        retry_after = state.get('retry_after', 0)
+    def _make_error_response(self, state):
+        retry_after = state.retry_after
         
         response = make_response(
             jsonify({
                 "error": "Rate limit exceeded",
-                "limit": state.get('limit', 0),
+                "limit": state.limit,
                 "remaining": 0,
                 "retry_after": retry_after
             }),
@@ -108,7 +108,7 @@ class FlaskRateLimiter:
         )
         
         response.headers['Retry-After'] = str(int(retry_after))
-        response.headers['X-RateLimit-Limit'] = str(state.get('limit', 0))
+        response.headers['X-RateLimit-Limit'] = str(state.limit)
         response.headers['X-RateLimit-Remaining'] = '0'
         
         return response
