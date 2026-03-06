@@ -292,7 +292,7 @@ pytest -m integration
 
 - **General Questions**: [GitHub Discussions](https://github.com/vladlen-codes/ratelink/discussions)
 - **Bug Reports**: [GitHub Issues](https://github.com/vladlen-codes/ratelink/issues)
-- **Security Issues**: Email security@example.com (do not open public issues)
+- **Security Issues**: Email vladlen.codes@gmail.com (do not open public issues)
 
 ## Recognition
 
